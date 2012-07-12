@@ -34,6 +34,7 @@ $tableizer = new Tableizer();
 /**
  * Actions and Filters
  */
+add_action('admin_head', array($tableizer, 'admin_head'));
 add_action('admin_menu', array($tableizer, 'admin_menu'));
 register_activation_hook(__FILE__, 'tableizer_INSTALL');
 
@@ -66,6 +67,39 @@ function tableizer_get_errors(){
 		$html .= "<li>{$error}</li>\n";
 
 	return $html . "</ul></div>\n";
+}
+
+/**
+ * Builds up the messages box from the messages array.
+ *
+ * @global array $tableizer_message
+ * @return string 
+ */
+function tableizer_get_messages(){
+	
+	global $tableizer_message;
+
+	$html = "<div id=\"message-1\" class=\"updated\"><ul>\n";
+
+	if (!count($tableizer_message))
+		return false;
+
+	foreach ($tableizer_message as $msg)
+		$html .= "<li>{$msg}</li>\n";
+
+	return $html . "</ul></div>\n";
+}
+
+/**
+ * Adds a message to the messages array.
+ *
+ * @global array $tableizer_message
+ * @param string $msg 
+ */
+function tableizer_message( $msg ){
+	
+	global $tableizer_message;
+	$tableizer_message[] = $msg;
 }
 
 /**
