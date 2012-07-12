@@ -1,7 +1,10 @@
 <?php
-
 /**
  * Contains the main class for the tableizers package.
+ * 
+ * As of current version wp_editor()'s tiny_mce is used to convert the data to
+ * tables. Previous to this the backend was developed to do the conversion and
+ * print the table @see Tableizer::create_tables
  * 
  * @package tableizer
  */
@@ -10,6 +13,7 @@
  * Tableizer class.
  *
  * @author daithi
+ * @package tableizer
  */
 class Tableizer {
 
@@ -103,6 +107,7 @@ class Tableizer {
 	 * data is stored in $this->table_html. This method error reports and
 	 * sets a success message if no errors.
 	 *
+	 * @deprecated
 	 * @return boolean
 	 */
 	public function create_tables() {
