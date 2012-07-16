@@ -1,12 +1,12 @@
 <?php
 /**
- * @package tableizer
+ * @package post-editor
  */
 /*
-Plugin Name: Tableizer
+Plugin Name: Post Editor
 Plugin URI: http://david-coombes.com
-Description: create html tables from excel data copy and pasted to a textarea
-Version: 2.5.6
+Description: Add a model for manipulating pasted data on the wordpress posts/page editor. Modal will be called from button on normal tinyMCE toolbar
+Version: 0.1
 Author: David Coombes
 Author URI: http://david-coombes.com
 */
@@ -16,54 +16,59 @@ error_reporting(E_ALL);
 ini_set("display_errors", "on");
 
 //constants
-define("TABLEIZER_DIR", WP_PLUGIN_DIR . "/" . basename(dirname(__FILE__)));
-define("TABLEIZER_URL", WP_PLUGIN_URL . "/" . basename(dirname(__FILE__)));
+define("POSTEDITOR_DIR", WP_PLUGIN_DIR . "/" . basename(dirname(__FILE__)));
+define("POSTEDITOR_URL", WP_PLUGIN_URL . "/" . basename(dirname(__FILE__)));
 
 //vars
-$tableizer_action = @$_REQUEST['tableizer_action'];
-$tableizer_error = array();
-$tableizer_message = array();
+$posteditor_action = @$_REQUEST['posteditor_action'];
+$posteditor_error = array();
+$posteditor_message = array();
 
 //include files
-require_once( TABLEIZER_DIR . "/application/includes/debug.func.php");
-require_once( TABLEIZER_DIR . "/application/Tableizer.class.php");
+require_once( POSTEDITOR_DIR . "/application/includes/debug.func.php");
+require_once( POSTEDITOR_DIR . "/application/Posteditor.class.php");
+require_once( POSTEDITOR_DIR . "/application/modules/PosteditorModal.class.php");
 
 //construct plugin objects
-$tableizer = new Tableizer();
+$posteditor = new Posteditor();
+$posteditor_modal = new PosteditorModal();
 
 /**
  * Actions and Filters
  */
-add_action('admin_head', array($tableizer, 'admin_head'));
-add_action('admin_menu', array($tableizer, 'admin_menu'));
-register_activation_hook(__FILE__, 'tableizer_INSTALL');
+add_action('admin_init', array($posteditor, 'admin_init'));
+add_action('admin_head', array($posteditor, 'admin_head'));
+add_action('init', array($posteditor, 'init'));
+add_action('wp_ajax_get_modal_editor',array($posteditor_modal,'get_page'));
+register_activation_hook(__FILE__, 'posteditor_INSTALL');
 
 /**
  * Adds an error to the errors array.
  *
- * @global array $tableizer_error
+ * @global array $posteditor_error
  * @param string $msg The error message
  */
-function tableizer_error( $msg ){
-	global $tableizer_error;
-	$tableizer_error[] = $msg;
+function posteditor_error( $msg ){
+	global $posteditor_error;
+	$posteditor_error[] = $msg;
 }
 
 /**
  * Builds up the error box from the errors array.
  *
- * @global array $tableizer_error
+ * @global array $posteditor_error
  * @return string 
  */
-function tableizer_get_errors(){
+function posteditor_get_errors(){
 	
-	global $tableizer_error;
+	global $posteditor_error;
+	
 	$html = "<div id=\"message\" class=\"error\"><ul>\n";
 
-	if (!count($tableizer_error))
+	if (!count($posteditor_error))
 		return false;
 
-	foreach ($tableizer_error as $error)
+	foreach ($posteditor_error as $error)
 		$html .= "<li>{$error}</li>\n";
 
 	return $html . "</ul></div>\n";
@@ -72,19 +77,19 @@ function tableizer_get_errors(){
 /**
  * Builds up the messages box from the messages array.
  *
- * @global array $tableizer_message
+ * @global array $posteditor_message
  * @return string 
  */
-function tableizer_get_messages(){
+function posteditor_get_messages(){
 	
-	global $tableizer_message;
+	global $posteditor_message;
 
 	$html = "<div id=\"message-1\" class=\"updated\"><ul>\n";
 
-	if (!count($tableizer_message))
+	if (!count($posteditor_message))
 		return false;
 
-	foreach ($tableizer_message as $msg)
+	foreach ($posteditor_message as $msg)
 		$html .= "<li>{$msg}</li>\n";
 
 	return $html . "</ul></div>\n";
@@ -93,21 +98,12 @@ function tableizer_get_messages(){
 /**
  * Adds a message to the messages array.
  *
- * @global array $tableizer_message
+ * @global array $posteditor_message
  * @param string $msg 
  */
-function tableizer_message( $msg ){
+function posteditor_message( $msg ){
 	
-	global $tableizer_message;
-	$tableizer_message[] = $msg;
-}
-
-/**
- * The plugin install callback.
- * 
- * @deprecated
- */
-function tableizer_INSTALL(){
-	;
+	global $posteditor_message;
+	$posteditor_message[] = $msg;
 }
 ?>
