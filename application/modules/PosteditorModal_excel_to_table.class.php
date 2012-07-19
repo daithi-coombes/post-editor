@@ -27,7 +27,7 @@ class PosteditorModal_excel_to_table {
 		
 		$html = "<table>\n";
 		$data = array();
-		$_POST['data'] = trim($_POST['data']);
+		@$_POST['data'] = trim($_POST['data']);
 		$cols = 0;
 
 		//split into rows
@@ -76,6 +76,9 @@ class PosteditorModal_excel_to_table {
 		return $html;
 	}
 	
+	public function get_page(){
+		return "this is the page";
+	}
 }
 
 ?>

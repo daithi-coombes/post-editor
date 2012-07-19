@@ -21,6 +21,9 @@
 			// Register the command so that it can be invoked by using tinyMCE.activeEditor.execCommand('mcePosteditormodal');
 			ed.addCommand('mcePosteditormodal', function() {
 				
+				tb_show('', '/wp-admin/admin-ajax.php?action=get_modal_editor&posteditormodal_action=excel_to_table&_wpnonce='+posteditor_modal_nonce+'TB_iframe=true');
+				return;
+				
 				//get post editor area width
 				var width = jQuery('#content_ifr').contents().find('body').width();
 				

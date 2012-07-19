@@ -1,3 +1,12 @@
+
+<div id="media-upload-header">
+	<ul id="sidemenu">
+		<!--[--get tabs--]-->
+	</ul>	
+</div>
+<!--[--action page--]-->
+
+<!-- @deprecated
 <form method="post" id="raw-data">
 
 	<input type="hidden" name="posteditor_action" value="parse_modal_data"/>
@@ -6,9 +15,10 @@
 		<button name="posteditormodal_action" value="excel_to_table">Excel to Table</button>
 	</div>
 
-	<textarea style="width: 100%; height: 100%" name="data"><!--[--textarea content--]--></textarea>
+	<textarea style="width: 100%; height: 100%" name="data"><!--[--textarea content--]--</textarea>
 </form>
 
 <form method="post" id="results-data">
-	<textarea id="results" name="results"><!--[--modal result--]--></textarea>
+	<textarea id="results" name="results"><!--[--modal result--]--</textarea>
 </form>
+//-->

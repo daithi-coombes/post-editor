@@ -42,6 +42,17 @@ add_action('init', array($posteditor, 'init'));
 add_action('wp_ajax_get_modal_editor',array($posteditor_modal,'get_page'));
 register_activation_hook(__FILE__, 'posteditor_INSTALL');
 
+
+
+function append_new_media_tab($tabs){
+	$newtab = array('genify' => __('Axcoto Genify','axcotogenify'));
+	return array_merge($tabs, $newtab);
+}
+add_filter('media_upload_tabs', 'append_new_media_tab');
+
+
+
+
 /**
  * Adds an error to the errors array.
  *

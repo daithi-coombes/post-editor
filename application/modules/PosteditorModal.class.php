@@ -25,15 +25,14 @@
  */
 class PosteditorModal {
 
+	/** @var object The current action object */
+	private $action_obj;
 	/** @var string Holds the html from the view file for parsing */
 	private $html;
-
 	/** @var string The html result for the modal popup */
 	private $modal_result;
-
 	/** @var array An array of shortcode=>value pairs for the view file */
 	private $shortcodes;
-
 	/** @var string The content for the textarea in the modal popup */
 	private $textarea_content;
 
@@ -51,6 +50,10 @@ class PosteditorModal {
 			if(!wp_verify_nonce($_REQUEST['_wpnonce'],"post editor modal")) die('Invalid nonce');
 		
 		//default params
+		$this->actions = array(
+			'excel_to_table' => 'Tables (Excel > HTML)',
+			'' => 'Extension Title'
+		);
 		$this->html = "";
 		$this->modal_result = "";
 		$this->shortcodes = array();
@@ -61,20 +64,25 @@ class PosteditorModal {
 	}
 
 	/**
-	 * Calls any actions for the PosteditorModal.
+	 * Constructs the action object.
 	 */
 	public function admin_init() {
 
 		//check for modal action
-		(@$_POST['posteditormodal_action']) ?
-			$action = "action_{$_POST['posteditormodal_action']}" :
+		(@$_REQUEST['posteditormodal_action']) ?
+			$action = $_REQUEST['posteditormodal_action'] :
 			$action = false;
 
+		require_once( POSTEDITOR_DIR . "/application/modules/PosteditorModal_{$action}.class.php");
+		$class = "PosteditorModal_{$action}";
+		$this->action = new $class();
+		
+		/*
 		//if modal action call it
 		if ($action)
 			if (method_exists($this, $action))
-				$this->$action();		
-
+				$this->$action();
+		*/
 	}
 
 	/**
@@ -108,6 +116,25 @@ class PosteditorModal {
 		//set params
 		$this->html = file_get_contents(POSTEDITOR_DIR . "/public_html/PosteditorModal.php");
 		$this->shortcodes['modal result'] = $this->modal_result;
+		$this->shortcodes['get tabs'] = $this->get_tabs();
+		$this->shortcodes['action page'] = $this->action->get_page();
+		$this->set_shortcodes();
+		
+		//iframe head
+		?><html><head><?php
+		wp_enqueue_style('media');
+		wp_enqueue_style('colors');
+		wp_head();
+		?></head><?php
+		
+		//iframe body
+		?><body id="media-upload" class="js"><?php
+		print $this->html;
+		
+		wp_footer();
+		?></body></html>
+		<?php
+		/*
 		$this->shortcodes['textarea content'] = $this->textarea_content;
 
 		//build includes
@@ -126,23 +153,44 @@ class PosteditorModal {
 		//print footer and die() for ajax
 		wp_footer();
 		?></body></html><?php
+		*/
+		
 		die();
 	}
 
 	/**
 	 * Runs any excel_to_table actions.
 	 * 
+	 * @deprecated
 	 * @see PosteditorModal_excel_to_table
 	 */
 	private function action_excel_to_table() {
-
+		/*
 		//load modal action module
 		require_once( POSTEDITOR_DIR . "/application/modules/PosteditorModal_excel_to_table.class.php");
-		$action = new PosteditorModal_excel_to_table();
+		$this->action = new PosteditorModal_excel_to_table();
 
-		$this->modal_result = $action->build_table();
+		$this->modal_result = $this->action->build_table();
+		*/
 	}
 
+	/**
+	 * Returns the html for the tabs at the top of the modal window.
+	 *
+	 * @return string 
+	 */
+	private function get_tabs(){
+		
+		$html = "";
+		
+		foreach($this->actions as $action=>$tab){
+			(@$_REQUEST['posteditormodal_action']==$action) ? $class='class="current"' : $class='';
+			$html .= "<li><a {$class} href=\"/wp-admin/admin-ajax.php?action=get_modal_editor&posteditormodal_action={$action}&_wpnonce={$_REQUEST['_wpnonce']}&TB_iframe=true\">{$tab}</a></li>\n";
+		}
+		
+		return $html;
+	}
+	
 	/**
 	 * Loads javascript files
 	 * 
