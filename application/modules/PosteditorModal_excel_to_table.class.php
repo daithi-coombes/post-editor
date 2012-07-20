@@ -102,7 +102,7 @@ class PosteditorModal_excel_to_table {
 			//if only first cell filled add colspan to create just one &lt;td>
 			if(!empty($row[0])){
 				for($x=1; $x<$cols; $x++){
-					$data = trim($row[$x]);
+					$data = trim(@$row[$x]);
 					if(empty($data)) $use_colspan = true;
 					else
 						break;

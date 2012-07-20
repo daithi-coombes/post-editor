@@ -9,6 +9,13 @@ jQuery(document).ready(function($) {
 
 var PostEditorModal = function($){
 	
+	/**
+	 * Sets the dimensions of div's based on document height of modal.
+	 * 
+	 * @method
+	 * @public
+	 * @member PostEditorModal
+	 */
 	this.set_dimensions = function(){
 		
 		//set content height
