@@ -8,17 +8,17 @@
 /**
  * This class handles the iframe contents for the modal popup tinymce plugin.
  * 
- * Over time more actions will be added to this module, the format of adding an
- * action is:
- *  * namepsace: the name space is in the format {sourceData}_to_{resultData}
- * for example, converting excel to html tables, the namespace would be
- * excel_to_tables
- *  * Add a button to the view file PosteditorModal.php with a name of
- * "posteditormodal_action" and value of "{$namespace}"
- *  * add method to this class called: action_{$namespace} This method should
- * load the below class and act as a router for that classes methods and calls.
- *  * class: the class for the action should be located in modules folder and
- * called: PosteditorModal_{$namespace}.class.php
+ * The format of adding an action is:
+ * - The name space is in the format {sourceData}_to_{resultData} for example, 
+ *   converting excel to html tables, the namespace would be excel_to_tables
+ * - Register the action with the module by adding to the param $this->action in
+ *   the format $action_namespace => tab text
+ * - Add any js and css files to POSTEDITOR_DIR . /public_html/js|css in the
+ *   formate PosteditorModal_{$namespace}.js|css respectfully. Register these in
+ *   public methods $this->load_styles() and $this->load_scripts() in the new
+ *   action class file.
+ * - The class for the action should be located in modules folder and
+ *   called PosteditorModal_{$namespace}.class.php
  *
  * @author daithi
  * @package post-editor
@@ -26,15 +26,11 @@
 class PosteditorModal {
 
 	/** @var object The current action object */
-	private $action_obj;
+	private $action;
 	/** @var string Holds the html from the view file for parsing */
 	private $html;
-	/** @var string The html result for the modal popup */
-	private $modal_result;
 	/** @var array An array of shortcode=>value pairs for the view file */
 	private $shortcodes;
-	/** @var string The content for the textarea in the modal popup */
-	private $textarea_content;
 
 	/**
 	 * constructor
@@ -55,12 +51,10 @@ class PosteditorModal {
 			'' => 'Extension Title'
 		);
 		$this->html = "";
-		$this->modal_result = "";
 		$this->shortcodes = array();
-		(@$_POST['data']) ? $this->textarea_content=$_POST['data'] : $this->textarea_content = "";
 
 		add_action('admin_init', array(&$this, 'admin_init'));	//look for actions
-		add_action('wp_head', array(&$this, 'admin_head'));		//write javascript globals to head
+		//add_action('wp_head', array(&$this, 'admin_head'));		//write javascript globals to head - @deprecated
 	}
 
 	/**
@@ -69,27 +63,23 @@ class PosteditorModal {
 	public function admin_init() {
 
 		//check for modal action
-		(@$_REQUEST['posteditormodal_action']) ?
-			$action = $_REQUEST['posteditormodal_action'] :
-			$action = false;
+		if(@$_REQUEST['posteditormodal_action'])
+			$action = $_REQUEST['posteditormodal_action'];
+		else return;
 
 		require_once( POSTEDITOR_DIR . "/application/modules/PosteditorModal_{$action}.class.php");
 		$class = "PosteditorModal_{$action}";
 		$this->action = new $class();
 		
-		/*
-		//if modal action call it
-		if ($action)
-			if (method_exists($this, $action))
-				$this->$action();
-		*/
 	}
 
 	/**
 	 * Adds global javascript vars to the admin head.
+	 * 
+	 * @deprecated
 	 */
 	public function admin_head(){
-		
+		/**
 		(!empty($this->modal_result)) ? $show_results='true' : $show_results='false';
 		
 		//print global vars
@@ -101,6 +91,8 @@ class PosteditorModal {
 			var posteditor_modal_nonce = '<?php echo wp_create_nonce("post editor modal"); ?>';
 		</script>
 		<?php
+		 * 
+		 */
 	}
 	
 	/**
@@ -115,10 +107,15 @@ class PosteditorModal {
 
 		//set params
 		$this->html = file_get_contents(POSTEDITOR_DIR . "/public_html/PosteditorModal.php");
-		$this->shortcodes['modal result'] = $this->modal_result;
 		$this->shortcodes['get tabs'] = $this->get_tabs();
 		$this->shortcodes['action page'] = $this->action->get_page();
 		$this->set_shortcodes();
+		
+		//scripts and style
+		$this->load_scripts();
+		$this->action->load_scripts();
+		$this->load_styles();
+		$this->action->load_styles();
 		
 		//iframe head
 		?><html><head><?php
@@ -131,47 +128,11 @@ class PosteditorModal {
 		?><body id="media-upload" class="js"><?php
 		print $this->html;
 		
+		//footer and die()
 		wp_footer();
 		?></body></html>
 		<?php
-		/*
-		$this->shortcodes['textarea content'] = $this->textarea_content;
-
-		//build includes
-		$this->load_scripts();
-		$this->load_styles();
-		$this->set_shortcodes();
-
-		//head
-		?><head><?php
-		wp_head();
-		?></head><body><?php
-		
-		//print view file
-		print $this->html;
-
-		//print footer and die() for ajax
-		wp_footer();
-		?></body></html><?php
-		*/
-		
 		die();
-	}
-
-	/**
-	 * Runs any excel_to_table actions.
-	 * 
-	 * @deprecated
-	 * @see PosteditorModal_excel_to_table
-	 */
-	private function action_excel_to_table() {
-		/*
-		//load modal action module
-		require_once( POSTEDITOR_DIR . "/application/modules/PosteditorModal_excel_to_table.class.php");
-		$this->action = new PosteditorModal_excel_to_table();
-
-		$this->modal_result = $this->action->build_table();
-		*/
 	}
 
 	/**
@@ -198,13 +159,11 @@ class PosteditorModal {
 	 */
 	private function load_scripts() {
 		
-		wp_register_script('posteditormodal-tinymce', POSTEDITOR_URL . "/application/includes/tinymce/jscripts/tiny_mce/jquery.tinymce.js");
-		wp_register_script('posteditormodal', POSTEDITOR_URL . "/public_html/js/PosteditorModal.js", array(
-			'jquery',
-			'posteditormodal-tinymce'
-		));
+		wp_register_script('posteditormodal', POSTEDITOR_URL . "/public_html/js/PosteditorModal.js");
 		
-		wp_enqueue_script('posteditormodal');
+		wp_enqueue_script('posteditormodal',array(
+			'jquery'
+		));
 	}
 
 	/**

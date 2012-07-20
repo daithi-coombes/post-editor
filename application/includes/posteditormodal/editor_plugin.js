@@ -19,73 +19,13 @@
 		 */
 		init : function(ed, url) {
 			// Register the command so that it can be invoked by using tinyMCE.activeEditor.execCommand('mcePosteditormodal');
-			ed.addCommand('mcePosteditormodal', function() {
-				
+			ed.addCommand('mcePosteditormodal', function() {				
 				tb_show('', '/wp-admin/admin-ajax.php?action=get_modal_editor&posteditormodal_action=excel_to_table&_wpnonce='+posteditor_modal_nonce+'TB_iframe=true');
-				return;
-				
-				//get post editor area width
-				var width = jQuery('#content_ifr').contents().find('body').width();
-				
-				//open dialog with iframe
-				jQuery('<div width="'+width+'" height="90%"><iframe id="posteditor-modal" src="/wp-admin/admin-ajax.php?action=get_modal_editor&amp;_wpnonce='+posteditor_modal_nonce+'" style="width:100%;height:100%"></iframe></div>').dialog({
-					modal: true,
-					width : width+100,
-					height: jQuery(window).height()-150,
-					dialogClass : 'posteditorModal',
-					buttons : {
-						"Done" : function(){	//add contents to post editor
-							var content = '';
-							
-							//if tinymce is not loaded then get content from textarea
-							if(!jQuery("#posteditor-modal")[0].contentWindow.tinyMCE)
-								content = jQuery('#posteditor-modal')[0].contentWindow.jQuery('textarea[name=data]').val();
-							//else get tinymce content
-							else
-								content = jQuery('#posteditor-modal')[0].contentWindow.tinyMCE.activeEditor.getContent();
-							
-							//set post editor data and close
-							ed.selection.setContent(content);
-							jQuery(this).dialog("close");
-						},
-						"Reset" : function(){
-							jQuery('#posteditor-modal')[0].contentWindow.tinyMCE.activeEditor.setContent('');
-							jQuery('#posteditor-modal')[0].contentWindow.jQuery('textarea[name=data]').html('');
-							jQuery('#posteditor-modal')[0].contentWindow.jQuery('#results-data').hide();
-							jQuery('#posteditor-modal')[0].contentWindow.jQuery('#raw-data').show();
-						},
-						"Cancel" : function(){ //close dialog
-							jQuery(this).dialog("close");
-						}
-					},
-					
-					//fix for modal drag perfomance issues @see http://stackoverflow.com/questions/7145317/jquery-ui-dialog-around-iframe-performance-issues
-					dragStart: function (event, ui) {
-						jQuery('iframe', this).each(function() {
-							jQuery('<div class="ui-draggable-iframeFix" style="background: transparent;"></div>')
-								.css({
-									width: '100%', 
-									height: '100%',
-									position: 'absolute', 
-									opacity: '1', 
-									zIndex: 1000, 
-									overflowX: 'hidden'
-								})
-							.css(jQuery(this).position())
-							.appendTo(jQuery(this).offsetParent());
-						});
-					},
-					dragStop: function (event, ui) {
-						jQuery("div.ui-draggable-iframeFix").each(function() {
-							this.parentNode.removeChild(this);
-						}); //Remove frame helpers
-					}
-				});
 			});
 
 			// Register posteditormodal button
 			ed.addButton('posteditormodal', {
-				title : 'posteditormodal.desc',
+				title : 'CityIndex Advanced Editor',
 				cmd : 'mcePosteditormodal',
 				image : url + '/img/posteditormodal.gif'
 			});

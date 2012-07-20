@@ -94,7 +94,11 @@
 	<h3><a href="#class_methods">Methods</a></h3>
 	<ul class="small">
 				<li><a href="../post-editor/PosteditorModal_excel_to_table.html#method__construct">__construct</a></li>
-				<li><a href="../post-editor/PosteditorModal_excel_to_table.html#methodbuild_table">build_table</a></li>
+				<li><a href="../post-editor/PosteditorModal_excel_to_table.html#methodadmin_head">admin_head</a></li>
+				<li><a href="../post-editor/PosteditorModal_excel_to_table.html#methodbuild_html_table">build_html_table</a></li>
+				<li><a href="../post-editor/PosteditorModal_excel_to_table.html#methodget_page">get_page</a></li>
+				<li><a href="../post-editor/PosteditorModal_excel_to_table.html#methodload_scripts">load_scripts</a></li>
+				<li><a href="../post-editor/PosteditorModal_excel_to_table.html#methodload_styles">load_styles</a></li>
 			</ul>
 </div>
 
@@ -141,7 +145,7 @@
 )</code>
 		</p>
 	
-		<p class="linenumber">[line 16]</p>
+		<p class="linenumber">[line 28]</p>
 		<p align="center"><strong>constructor
 </strong></p>
 <h4>Tags:</h4>
@@ -155,17 +159,110 @@
 		</ul>
 	</div>
 	<p class="top">[ <a href="#top">Top</a> ]</p>
-	<a name="methodbuild_table"></a>
+	<a name="methodadmin_head"></a>
 	<p></p>
-	<h3>build_table</h3>
+	<h3>admin_head</h3>
 	<div class="indent">
 		<p>
-		<code>string build_table(
+		<code>void admin_head(
 )</code>
 		</p>
 	
-		<p class="linenumber">[line 26]</p>
+		<p class="linenumber">[line 54]</p>
+		<p align="center"><strong>Adds global javascript vars to the admin head.
+</strong></p>
+<h4>Tags:</h4>
+<ul>
+	<li><b>deprecated</b> - </li>
+	<li><b>access</b> - public</li>
+</ul>
+		
+	
+	<h4>Parameters:</h4>
+	<ul>
+		</ul>
+	</div>
+	<p class="top">[ <a href="#top">Top</a> ]</p>
+	<a name="methodbuild_html_table"></a>
+	<p></p>
+	<h3>build_html_table</h3>
+	<div class="indent">
+		<p>
+		<code>void build_html_table(
+)</code>
+		</p>
+	
+		<p class="linenumber">[line 75]</p>
 		<p align="center"><strong>Builds a html table from data copied from excel spreadsheet. Takes data  from $_POST.
+</strong></p>
+<p>Stores result in $this-&gt;modal_result</p><h4>Tags:</h4>
+<ul>
+	<li><b>access</b> - public</li>
+</ul>
+		
+	
+	<h4>Parameters:</h4>
+	<ul>
+		</ul>
+	</div>
+	<p class="top">[ <a href="#top">Top</a> ]</p>
+	<a name="methodget_page"></a>
+	<p></p>
+	<h3>get_page</h3>
+	<div class="indent">
+		<p>
+		<code>string get_page(
+)</code>
+		</p>
+	
+		<p class="linenumber">[line 133]</p>
+		<p align="center"><strong>Returns the html for the view file.
+</strong></p>
+<h4>Tags:</h4>
+<ul>
+	<li><b>access</b> - public</li>
+</ul>
+		
+	
+	<h4>Parameters:</h4>
+	<ul>
+		</ul>
+	</div>
+	<p class="top">[ <a href="#top">Top</a> ]</p>
+	<a name="methodload_scripts"></a>
+	<p></p>
+	<h3>load_scripts</h3>
+	<div class="indent">
+		<p>
+		<code>void load_scripts(
+)</code>
+		</p>
+	
+		<p class="linenumber">[line 149]</p>
+		<p align="center"><strong>Loads javascript files
+</strong></p>
+<h4>Tags:</h4>
+<ul>
+	<li><b>access</b> - public</li>
+</ul>
+		
+	
+	<h4>Parameters:</h4>
+	<ul>
+		</ul>
+	</div>
+	<p class="top">[ <a href="#top">Top</a> ]</p>
+	<a name="methodload_styles"></a>
+	<p></p>
+	<h3>load_styles</h3>
+	<div class="indent">
+		<p>
+		<code>void load_styles(
+)</code>
+		</p>
+	
+		<p class="linenumber">[line 164]</p>
+		<p align="center"><strong>Loads css files
 </strong></p>
 <h4>Tags:</h4>
 <ul>
@@ -185,7 +282,7 @@
 	</div>
 	<div id="credit">
 		<hr>
-		Documentation generated on Mon, 16 Jul 2012 18:12:02 +0200 by <a href="http://www.phpdoc.org">phpDocumentor 1.4.4</a>
+		Documentation generated on Fri, 20 Jul 2012 02:31:13 +0200 by <a href="http://www.phpdoc.org">phpDocumentor 1.4.4</a>
 	</div>
 </div>
 </body>

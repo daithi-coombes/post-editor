@@ -63,7 +63,7 @@
 	
 
 <div class="leftcol">
-	<h3><a href="#class_details">Class Overview</a> <span class="smalllinenumber">[line 26]</span></h3>
+	<h3><a href="#class_details">Class Overview</a> <span class="smalllinenumber">[line 38]</span></h3>
 	<div id="classTree"><pre></pre>
 </div>
 	<div class="small">
@@ -120,7 +120,14 @@
 	<h2>Class Details</h2>
 	<p align="center"><strong>This class handles the iframe contents for the modal popup tinymce plugin.
 </strong></p>
-<p>Over time more actions will be added to this module, the format of adding an  action is:   * namepsace: the name space is in the format {sourceData}_to_{resultData}  for example, converting excel to html tables, the namespace would be  excel_to_tables   * Add a button to the view file PosteditorModal.php with a name of  &quot;posteditormodal_action&quot; and value of &quot;{$namespace}&quot;   * add method to this class called: action_{$namespace} This method should  load the below class and act as a router for that classes methods and calls.   * class: the class for the action should be located in modules folder and  called: PosteditorModal_{$namespace}.class.php</p><h4>Tags:</h4>
+<p>Here's a simple list: <ul><li>item 1</li><li>item 2, this one
+   is multi-line</li><li>item 3</li></ul> end of list.  Next list is ordered <ol><li>ordered item 1</li><li>ordered item 2</li></ol> end of list. This is also ordered: <ol><li>ordered item 1</li><li>ordered item 2</li></ol>  The format of adding an action is: <ul><li>the name space is in the format {sourceData}_to_{resultData} for example,
+   converting excel to html tables, the namespace would be excel_to_tables</li><li>register the action with the module by adding to the param $this-&gt;action in
+   the format $action_namespace =&gt; tab text</li><li>add any js and css files to POSTEDITOR_DIR . /public_html/js|css in the
+   formate PosteditorModal_{$namespace}.js|css respectfully. Register these in
+   public methods $this-&gt;load_styles() and $this-&gt;load_scripts() in the new
+   action class file.</li><li>the class for the action should be located in modules folder and
+   called PosteditorModal_{$namespace}.class.php</li></ul></p><h4>Tags:</h4>
 <ul>
 	<li><b>author</b> - daithi</li>
 </ul>
@@ -143,7 +150,7 @@
 )</code>
 		</p>
 	
-		<p class="linenumber">[line 43]</p>
+		<p class="linenumber">[line 50]</p>
 		<p align="center"><strong>constructor
 </strong></p>
 <h4>Tags:</h4>
@@ -166,11 +173,12 @@
 )</code>
 		</p>
 	
-		<p class="linenumber">[line 83]</p>
+		<p class="linenumber">[line 93]</p>
 		<p align="center"><strong>Adds global javascript vars to the admin head.
 </strong></p>
 <h4>Tags:</h4>
 <ul>
+	<li><b>deprecated</b> - </li>
 	<li><b>access</b> - public</li>
 </ul>
 		
@@ -189,8 +197,8 @@
 )</code>
 		</p>
 	
-		<p class="linenumber">[line 66]</p>
-		<p align="center"><strong>Calls any actions for the PosteditorModal.
+		<p class="linenumber">[line 75]</p>
+		<p align="center"><strong>Constructs the action object.
 </strong></p>
 <h4>Tags:</h4>
 <ul>
@@ -212,7 +220,7 @@
 )</code>
 		</p>
 	
-		<p class="linenumber">[line 106]</p>
+		<p class="linenumber">[line 118]</p>
 		<p align="center"><strong>Prints the view html.
 </strong></p>
 <p>Loads the html then sets shortcodes ( @see PosteditorModal::set_shortcodes() )  then loads scripts (@see PosteditorModal::load_scripts() ) and styles  (@see PosteditorModal::load_styles() ) then prints html</p><h4>Tags:</h4>
@@ -233,7 +241,7 @@
 	</div>
 	<div id="credit">
 		<hr>
-		Documentation generated on Mon, 16 Jul 2012 18:12:02 +0200 by <a href="http://www.phpdoc.org">phpDocumentor 1.4.4</a>
+		Documentation generated on Fri, 20 Jul 2012 02:31:12 +0200 by <a href="http://www.phpdoc.org">phpDocumentor 1.4.4</a>
 	</div>
 </div>
 </body>

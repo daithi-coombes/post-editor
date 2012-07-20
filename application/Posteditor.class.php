@@ -106,13 +106,7 @@ class Posteditor {
 	 * @return void 
 	 */
 	private function load_styles() {
-
-		wp_register_style('jquery-ui-lightness', POSTEDITOR_URL . "/application/includes/jquery-ui/css/ui-lightness/jquery-ui-1.8.21.custom.css");
-		wp_register_style('posteditor', POSTEDITOR_URL . "/public_html/css/Posteditor.css", array(
-			'jquery-ui-lightness'
-		));
-		
-		wp_enqueue_style('posteditor');
+		;
 	}
 
 	/**
